@@ -1,21 +1,31 @@
 <?php
+$nombreDelFichero = 'lanzadera.min.gif';
+$dimensiones = getimagesize($nombreDelFichero);
+$ancho = $dimensiones[0];
+$alto = $dimensiones[1];
 $contador = 0;
+$totalColores = [];
+$imagen = imagecreatefromgif($nombreDelFichero);
 
-$imagen = imagecreatefromgif('imagen.min.gif');
-for ($x=0; $x < 32; $x++) {
-    echo "Línea $x: ";
-    for ($y=0; $y < 32; $y++) {
-        if ($y == 0) {
+for ($y=0; $y < $alto; $y++) {
+    echo "Línea $y: ";
+
+    for ($x=0; $x < $ancho; $x++) {
+        if ($x == 0) {
             $contador = 0;
         }
-
-        $color = imagecolorat($imagen, $x, $y);
-        if ($y == 31) {
+        $colorIndice = imagecolorat($imagen, $x, $y);
+        if (!array_key_exists($color, $totalColores)) {
+            array_push($totalColores, $colorIndice);
+        }
+        $color = array_search($colorIndice, $totalColores);
+        if ($x == ($ancho - 1)) {
             $colorSiguiente = -1;
         } else {
-            $colorSiguiente = imagecolorat($imagen, $x, $y+1);
+            $colorIndiceSiguiente = imagecolorat($imagen, $x + 1, $y);
+            $colorSiguiente = array_search($colorIndiceSiguiente, $totalColores);
         }
-
+    
         if ($color == $colorSiguiente) {
             $contador++;
         } else {
