@@ -29,7 +29,8 @@ for ($y=0; $y < $alto; $y++) {
         if ($color == $colorSiguiente) {
             $contador++;
         } else {
-            echo $color . 'x' . ($contador+1) . ' ';
+            //echo $color . 'x' . ($contador+1) . ' ';
+            echo $color . 'x' . ($contador-$x) . ' al ' . ($x) . ' ';
             $contador = 0;
         }
     }
