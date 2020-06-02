@@ -1,6 +1,7 @@
 <?php
 $mostrarMapa = false; //para hacerme una idea de los colores
 $colorAMostrar = 0; //si vale -1 muestra todos.
+$ultimaLineaHecha = 20; //para seguir por la línea que me quedé
 $nombreDelFichero = 'lanzadera.min.gif';
 $dimensiones = getimagesize($nombreDelFichero);
 $ancho = $dimensiones[0];
@@ -13,8 +14,10 @@ for ($y=0; $y < $alto; $y++) {
     $texto = "Línea " . ($y+1) . ": ";
     echo $texto;
     if (!$mostrarMapa) {
-        shell_exec('say "' . $texto . '"');
-        fgets($handle);
+        if ($y >= $ultimaLineaHecha) {
+            shell_exec('say "' . $texto . '"');
+            fgets($handle);
+        }
     }
 
     for ($x=0; $x < $ancho; $x++) {
@@ -35,15 +38,23 @@ for ($y=0; $y < $alto; $y++) {
             if ($color == $colorSiguiente) {
                 $contador++;
             } else {
+                $pixelDesde = $x-$contador+1;
+                $pixelHasta = $x+1;
                 //echo $color . 'x' . ($contador+1) . ' ';
                 if ($colorAMostrar == -1) {
-                    echo $color . 'x' . ($x-$contador+1) . ' al ' . ($x+1) . ' ';
+                    echo $color . 'x' . $pixelDesde . ' al ' . $pixelHasta . ' ';
                 } else {
                     if ($color == $colorAMostrar) {
-                        $texto = ($x-$contador+1) . ' al ' . ($x) . '. ';
+                        if ($pixelDesde == $pixelHasta) {
+                            $texto = $pixelDesde;
+                        } else {
+                            $texto = $pixelDesde . ' al ' . $pixelHasta . '. ';
+                        }
                         echo $texto;
-                        shell_exec('say "' . $texto . '"');
-                        fgets($handle);
+                        if ($y >= $ultimaLineaHecha) {
+                            shell_exec('say "' . $texto . '"');
+                            fgets($handle);
+                        }
                     }
                 }
                 $contador = 0;
