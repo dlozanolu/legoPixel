@@ -1,7 +1,7 @@
 <?php
 $mostrarMapa = false; //para hacerme una idea de los colores
 $colorAMostrar = 0; //si vale -1 muestra todos.
-$ultimaLineaHecha = 20; //para seguir por la línea que me quedé
+$ultimaLineaHecha = 200; //para seguir por la línea que me quedé
 $nombreDelFichero = 'lanzadera.min.gif';
 $dimensiones = getimagesize($nombreDelFichero);
 $ancho = $dimensiones[0];
@@ -10,6 +10,9 @@ $contador = 0;
 $imagen = imagecreatefromgif($nombreDelFichero);
 $handle = fopen("php://stdin", "r");
 
+if ($colorAMostrar > -1) {
+    echo "Instrucciones para el color 0.\n\n";
+}
 for ($y=0; $y < $alto; $y++) {
     $texto = "Línea " . ($y+1) . ": ";
     echo $texto;
@@ -46,9 +49,9 @@ for ($y=0; $y < $alto; $y++) {
                 } else {
                     if ($color == $colorAMostrar) {
                         if ($pixelDesde == $pixelHasta) {
-                            $texto = $pixelDesde;
+                            $texto = "$pixelDesde. ";
                         } else {
-                            $texto = $pixelDesde . ' al ' . $pixelHasta . '. ';
+                            $texto = "$pixelDesde al $pixelHasta. ";
                         }
                         echo $texto;
                         if ($y >= $ultimaLineaHecha) {
